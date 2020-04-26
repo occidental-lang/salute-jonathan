@@ -110,6 +110,14 @@
         
         <script>
             var currentChapter = '';
+            if (window.location.search.length > 2) {
+                currentChapter = window.location.search.slice(3);
+                console.log('current chapter:' + currentChapter)
+            } else {
+                console.log('no chapter found in url.')
+                currentChapter = '0';
+            }
+            fetchChapterText(currentChapter);
 
             function chooseChapter() {
                 var chapter = document.getElementById("chapterSelect").value;
@@ -130,6 +138,7 @@
             }
 
             function fetchChapterText(chapterNumber) {
+                history.pushState({chapter:chapterNumber},'','?c=' + chapterNumber);
                 document.getElementById("chapterSelect").value = chapterNumber;
                 document.getElementById('chapterArrows').innerHTML = '';
                 document.getElementById('chapterText').innerHTML = '';
@@ -168,7 +177,7 @@
                 });
             }
             
-            fetchChapterText('0');
+            
             
         </script>
     </body>
