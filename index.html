@@ -86,6 +86,10 @@
                     <option value="4">4</option>
                 </select>
             </div>
+            <br />
+            <div id="chapterArrows">
+                <!-- <button onclick="previousChapter()">👈 Previous Chapter</button> <button onclick="nextChapter()">Next Chapter 👉</button> -->
+            </div>
         </div>
 
         <div id="chapterAudio" class="container"></div>
@@ -102,40 +106,58 @@
 
             function chooseChapter() {
                 var chapter = document.getElementById("chapterSelect").value;
-                fetchChapterText(chapter);
                 currentChapter = chapter;
+                fetchChapterText(chapter);
             }
 
             function nextChapter() {
-                var nextChapter = String(Number(currentChapter) + 1)
-                fetchChapterText(nextChapter)
+                var chapter = String(Number(currentChapter) + 1);
+                currentChapter = chapter;
+                fetchChapterText(chapter)
             }
 
             function previousChapter() {
-                var nextChapter = String(Number(currentChapter) - 1)
-                fetchChapterText(nextChapter)
+                var chapter = String(Number(currentChapter) - 1);
+                currentChapter = chapter;
+                fetchChapterText(chapter);
             }
 
             function fetchChapterText(chapterNumber) {
+                document.getElementById("chapterSelect").value = chapterNumber;
+                document.getElementById('chapterArrows').innerHTML = '';
                 document.getElementById('chapterText').innerHTML = '';
                 document.getElementById('chapterAudio').innerHTML = '';
 
-                var fileName = `./book/${chapterNumber}.md`;
-                fetch(fileName).then(function(response) {
+                if (Number(chapterNumber) >= 1) {
+                    document.getElementById('chapterArrows').innerHTML = `<button onclick="previousChapter()">👈 Previous Chapter</button> <button onclick="nextChapter()">Next Chapter 👉</button>`;
+                }
+
+                var textFileName = `./book/${chapterNumber}.md`;
+                fetch(textFileName).then(function(response) {
                     if (response.status !== 200) {
                         throw response.status;
                     }
                     return response.text();
+                    document.getElementById('chapterText').innerHTML = `<p>${response.text()}</p><p>Chapter coming soon!</p>`;
                 }).then(function(file_content) {
-                    console.log(file_content);
                     document.getElementById('chapterText').innerHTML = marked(file_content);
                     tippy('[data-tippy-content]', {
                         inlinePositioning: true,
                         interactive: true
                     });
-                    document.getElementById('chapterAudio').innerHTML = `<audio controls><source src="./audio/${chapterNumber}.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio>`;
+
+                    var audioFileName = `./audio/${chapterNumber}.mp3`;
+                    fetch(audioFileName).then(function(response) {
+                        if (response.status !== 200) {
+                            throw response.status;
+                        }
+                    }).then(function() {
+                        document.getElementById('chapterAudio').innerHTML = `<audio controls><source src="${audioFileName}" type="audio/mpeg">Your browser does not support the audio element.</audio>`;
+                    }).catch(function(status) {
+                        console.log('Error ' + status)
+                    });
                 }).catch(function(status) {
-                    console.log('Error ' + status);
+                    document.getElementById('chapterText').innerHTML = `<p>Error: ${status}</p><p>Chapter coming soon!</p>`;
                 });
             }
             
