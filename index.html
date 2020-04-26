@@ -1,0 +1,107 @@
+<html lang="ie">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>🏰 Salute, Jonathan! 🦇</title>
+        <link
+        rel="stylesheet"
+        href="https://unpkg.com/tippy.js@6/animations/scale.css"
+        />
+        <style>
+            :root {
+                --bg-color: hsl(200, 7%, 8%);
+                --sidenote-bg-color: #43484d;
+                --text-color: #98a3ad;
+                --highlight-color: #2b79a2;
+            }
+            body {
+                background-color: var(--bg-color);
+                color: var(--text-color);
+            }
+            .container {
+                display: grid;
+                align-items: center;
+                justify-items: center;
+            }
+
+            h1 {
+                border-bottom: 1px var(--highlight-color) solid;
+            }
+
+            p {
+                width: 50%;
+            }
+
+            .sidenote {
+                width: 20%;
+                float: right;
+                clear: right;
+                margin-right: -33%;
+                background-color: var(--sidenote-bg-color);
+                padding: 10px;
+                border-radius: 5px;
+            }
+
+            *[data-tippy-content] {
+                text-decoration:underline;
+                text-decoration-style: wavy;
+                text-decoration-color: var(--highlight-color);
+            }
+
+            @media screen and (max-width: 500px) {
+                p {
+                    width: 80%
+                }
+
+                .sidenote {
+                    margin: 2em;
+                    width: 80%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Salute Jonathan</h1>
+        </div>
+
+        <div id="chapterAudio" class="container"></div>
+        <div id="chapterText" class="container"></div>
+        
+        
+        <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+        <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+        <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+        <script>
+            //tippy('[data-tippy-content]');
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        
+        <script>
+            function fetchChapterText(chapterNumber) {
+                var fileName = `./book/${chapterNumber}.md`;
+                fetch(fileName).then(function(response) {
+                    if (response.status !== 200) {
+                        throw response.status;
+                    }
+                    return response.text();
+                }).then(function(file_content) {
+                    console.log(file_content);
+                    document.getElementById('chapterText').innerHTML = marked(file_content);
+                    tippy('[data-tippy-content]', {
+                        inlinePositioning: true,
+                        interactive: true
+                    });
+                    document.getElementById('chapterAudio').innerHTML = `<audio controls><source src="./audio/${chapterNumber}.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio>`
+                }).catch(function(status) {
+                    console.log('Error ' + status);
+                });
+            }
+            
+            fetchChapterText('1');
+
+            
+        </script>
+    </body>
+</html>
