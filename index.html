@@ -4,10 +4,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>🏰 Salute, Jonathan! 🦇</title>
-        <link
-        rel="stylesheet"
-        href="https://unpkg.com/tippy.js@6/animations/scale.css"
-        />
+
+        <link href="https://fonts.googleapis.com/css2?family=Lato&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
         <style>
             :root {
                 --bg-color: hsl(200, 7%, 8%);
@@ -15,18 +14,27 @@
                 --text-color: #98a3ad;
                 --highlight-color: #2b79a2;
             }
+
             body {
                 background-color: var(--bg-color);
                 color: var(--text-color);
+                font-family: 'Lato', sans-serif;
             }
+
             .container {
                 display: grid;
                 align-items: center;
                 justify-items: center;
+                margin-bottom: 2em;
+            }
+
+            h1, h2, h3, h4 {
+                font-family: 'Old Standard TT', serif;
+                border-bottom: 1px var(--highlight-color) solid;
             }
 
             h1 {
-                border-bottom: 1px var(--highlight-color) solid;
+                font-size: 6em;
             }
 
             p {
@@ -50,6 +58,10 @@
             }
 
             @media screen and (max-width: 500px) {
+                h1 {
+                    font-size: 3em;
+                }
+
                 p {
                     width: 80%
                 }
@@ -64,6 +76,16 @@
     <body>
         <div class="container">
             <h1>Salute Jonathan</h1>
+            <div>
+                <label>Select chapter: </label>
+                <select onchange="chooseChapter()" id="chapterSelect">
+                    <option value="0">Introduction</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
         </div>
 
         <div id="chapterAudio" class="container"></div>
@@ -73,13 +95,31 @@
         <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
         <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
         <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
-        <script>
-            //tippy('[data-tippy-content]');
-        </script>
         <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
         
         <script>
+            var currentChapter = '';
+
+            function chooseChapter() {
+                var chapter = document.getElementById("chapterSelect").value;
+                fetchChapterText(chapter);
+                currentChapter = chapter;
+            }
+
+            function nextChapter() {
+                var nextChapter = String(Number(currentChapter) + 1)
+                fetchChapterText(nextChapter)
+            }
+
+            function previousChapter() {
+                var nextChapter = String(Number(currentChapter) - 1)
+                fetchChapterText(nextChapter)
+            }
+
             function fetchChapterText(chapterNumber) {
+                document.getElementById('chapterText').innerHTML = '';
+                document.getElementById('chapterAudio').innerHTML = '';
+
                 var fileName = `./book/${chapterNumber}.md`;
                 fetch(fileName).then(function(response) {
                     if (response.status !== 200) {
@@ -93,14 +133,13 @@
                         inlinePositioning: true,
                         interactive: true
                     });
-                    document.getElementById('chapterAudio').innerHTML = `<audio controls><source src="./audio/${chapterNumber}.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio>`
+                    document.getElementById('chapterAudio').innerHTML = `<audio controls><source src="./audio/${chapterNumber}.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio>`;
                 }).catch(function(status) {
                     console.log('Error ' + status);
                 });
             }
             
-            fetchChapterText('1');
-
+            fetchChapterText('0');
             
         </script>
     </body>
