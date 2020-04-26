@@ -11,7 +11,7 @@ Contributing to the book is simple. Just create a markdown file named `chapterNu
 Structure the chapter texts like so:
 
 ```markdown
-# Chapter title
+## Chapter title
 
 Chapter text
 
@@ -19,7 +19,7 @@ Chapter text
 
 <span data-tippy-content="Hover-over text explanation note">This is an example of hover-over text.</span>
 
-# Grammatica
+## Grammatica
 
 This grammar text goes after the chapter text.
 ```
