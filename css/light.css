@@ -1,0 +1,5 @@
+/* light.css: 👉 dark-on-light */
+:root {
+    --bg-color: #98a3ad;
+    --text-color: hsl(200, 7%, 8%);
+}
