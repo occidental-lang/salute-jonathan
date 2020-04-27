@@ -13,6 +13,10 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    width: 87.5%;
+    max-width: 1400px;
+    /* padding-left: 12.5%; */
 }
 
 .container {
@@ -40,22 +44,22 @@ p {
 }
 
 .sidenote {
-    width: 20%;
+    width: 50%;
     float: right;
     clear: right;
-    margin-right: -33%;
+    margin-right: -60%;
     background-color: var(--sidenote-bg-color);
     padding: 10px;
     border-radius: 5px;
 }
 
-*[data-tippy-content] {
+[data-tippy-content] {
     text-decoration:underline;
     text-decoration-style: wavy;
     text-decoration-color: var(--highlight-color);
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 760px) {
     h1 {
         font-size: 2.5em;
         margin-top: 1.5em;
